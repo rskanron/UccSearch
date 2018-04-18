@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SODA;
 using UccSearch.Models;
@@ -11,6 +9,11 @@ namespace UccSearch.Controllers
 {
     public class HomeController : Controller
     {
+
+        const string MASTER_LIST = "h28s-f3n9";
+
+        const string FILINGS = "8d38-bpb6";
+
         public IActionResult Index()
         {
 
@@ -19,16 +22,28 @@ namespace UccSearch.Controllers
             var secretToken = "LJ480joYQ1IDuygZch1zv3mQRxwhVsLtPDY9";
 
 
+
+            
+
+
             var client = new SodaClient("https://data.colorado.gov", appToken);
 
             // Get a reference to the resource itself
             // The result (a Resouce object) is a generic type
             // The type parameter represents the underlying rows of the resource
             // and can be any JSON-serializable class
-            var dataset = client.GetResource<Dictionary<string, object>>("h28s-f3n9");
+
+            var dataset = client.GetResource<Dictionary<string, object>>(MASTER_LIST);
+            var query = new SoqlQuery();
+            query.Select("debtorname")
+                .Where("debtorname = 'SEEDS RANCH INC'")
+                .Limit(10);
+            var rows = dataset.Query(query);
+            //System.Console.WriteLine(query.LimitValue);            
 
             // Resource objects read their own data
-            var rows = dataset.GetRows(limit: 10);
+            //var dataset = client.GetResource<Dictionary<string, object>>(FILINGS);
+            //var rows = dataset.GetRows(limit: 10);
 
             //Console.WriteLine("Got {0} results. Dumping first results:", rows.Count());
 
@@ -40,7 +55,7 @@ namespace UccSearch.Controllers
             ViewBag.data = rows.ToList();
 
             return View();
-        }
+        } 
 
         public IActionResult About()
         {

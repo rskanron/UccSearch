@@ -1,6 +1,11 @@
 ﻿
 @foreach (var data in ViewBag.data as List<Dictionary<string, object>>)
 {
+    // from master list
     <p>@data["debtorname"]</p>
+
+    // from filings
+    // <p>@data["transactionid"], @data["transactiontype"]</p>
+
 }
 
