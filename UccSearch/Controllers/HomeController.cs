@@ -15,16 +15,11 @@ namespace UccSearch.Controllers
         const string FILINGS = "8d38-bpb6";
 
         public IActionResult Index()
-        {
+        {                         
+            var appToken = "";
+            //var secretToken = "";
 
-
-            var appToken = "H1vAoB9qxzcZPIlRgqGW5U791";
-            var secretToken = "LJ480joYQ1IDuygZch1zv3mQRxwhVsLtPDY9";
-
-
-
-            
-
+            string searchTerm = HttpContext.Request.Query["searchTerm"].ToString();
 
             var client = new SodaClient("https://data.colorado.gov", appToken);
 
@@ -36,9 +31,10 @@ namespace UccSearch.Controllers
             var dataset = client.GetResource<Dictionary<string, object>>(MASTER_LIST);
             var query = new SoqlQuery();
             query.Select("debtorname")
-                .Where("debtorname = 'SEEDS RANCH INC'")
+                .Where($"debtorname = '{searchTerm}'")
                 .Limit(10);
             var rows = dataset.Query(query);
+
             //System.Console.WriteLine(query.LimitValue);            
 
             // Resource objects read their own data
@@ -52,9 +48,9 @@ namespace UccSearch.Controllers
             //    Console.WriteLine(keyValue);
             //}
 
-            ViewBag.data = rows.ToList();
+            var data = rows.ToList();
 
-            return View();
+            return Json(data);
         } 
 
         public IActionResult About()
