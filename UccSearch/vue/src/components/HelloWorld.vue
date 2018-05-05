@@ -61,8 +61,7 @@ import axios from 'axios'
     padding: 0;
   }
   li {
-    display: inline-block;
-    margin: 0 10px;
+    margin: 10px 0px;
   }
   a {
     color: #42b983;

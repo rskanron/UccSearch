@@ -10,62 +10,38 @@ namespace UccSearch.Controllers
     public class HomeController : Controller
     {
 
-        const string MASTER_LIST = "h28s-f3n9";
+        const string MASTER_LIST_ID = "h28s-f3n9";
 
-        const string FILINGS = "8d38-bpb6";
+        const string FILINGS_ID = "8d38-bpb6";
+
+        const string BASE_URL = "https://data.colorado.gov";
 
         public IActionResult Index()
         {                         
             var appToken = "";
-            //var secretToken = "";
 
-            string searchTerm = HttpContext.Request.Query["searchTerm"].ToString();
+            var searchTerm = HttpContext.Request.Query["searchTerm"].ToString();
 
-            var client = new SodaClient("https://data.colorado.gov", appToken);
+            if (string.IsNullOrEmpty(searchTerm)) {
+                return Json(new string[0]);
+            } else {
 
-            // Get a reference to the resource itself
-            // The result (a Resouce object) is a generic type
-            // The type parameter represents the underlying rows of the resource
-            // and can be any JSON-serializable class
+                var client = new SodaClient(BASE_URL, appToken);
 
-            var dataset = client.GetResource<Dictionary<string, object>>(MASTER_LIST);
-            var query = new SoqlQuery();
-            query.Select("debtorname")
-                .Where($"debtorname = '{searchTerm}'")
-                .Limit(10);
-            var rows = dataset.Query(query);
+                var dataset = client.GetResource<Dictionary<string, object>>(MASTER_LIST_ID);
 
-            //System.Console.WriteLine(query.LimitValue);            
+                var query = new SoqlQuery();
+                query.Select("debtorname")
+                    .Where($"debtorname like '%{searchTerm.ToUpper()}%'")
+                    .Limit(30);
 
-            // Resource objects read their own data
-            //var dataset = client.GetResource<Dictionary<string, object>>(FILINGS);
-            //var rows = dataset.GetRows(limit: 10);
+                var rows = dataset.Query(query);
 
-            //Console.WriteLine("Got {0} results. Dumping first results:", rows.Count());
+                var data = rows.ToList();
 
-            //foreach (var keyValue in rows.First())
-            //{
-            //    Console.WriteLine(keyValue);
-            //}
-
-            var data = rows.ToList();
-
-            return Json(data);
+                return Json(data);
+            }
         } 
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
 
         public IActionResult Error()
         {
