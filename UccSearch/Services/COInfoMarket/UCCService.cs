@@ -5,7 +5,10 @@ using System.Linq;
 
 namespace UccSearch.Services.COInfoMarket
 {
-    public class UccService : IUccService
+    /// <summary>
+    /// Gets data from the Uniform Commercial Code of Colorado
+    /// </summary>
+    public class UccService
     {
         const string APP_TOKEN = "";
 
@@ -15,7 +18,7 @@ namespace UccSearch.Services.COInfoMarket
 
         const string BASE_URL = "https://data.colorado.gov";
 
-        public List<Dictionary<String, Object>> UCCSearch(string searchTerm)
+        public List<Dictionary<String, Object>> search(string searchTerm)
         {
                 var client = new SodaClient(BASE_URL, APP_TOKEN);
 

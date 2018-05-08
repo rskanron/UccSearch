@@ -5,17 +5,17 @@ using UccSearch.Services.COInfoMarket;
 
 namespace UccSearch.Controllers
 {
-    public class HomeController : Controller
+    public class DebtorsController : Controller
     {
 
-        public IActionResult Index(UccService uCCSearchService)
+        public IActionResult Index(UccService uccService)
         {                         
             var searchTerm = HttpContext.Request.Query["searchTerm"].ToString();
 
             if (string.IsNullOrEmpty(searchTerm)) {
                 return Json(new string[0]);
             } else {
-                var data = uCCSearchService.UCCSearch(searchTerm);
+                var data = uccService.search(searchTerm);
                 return Json(data);
             }
         } 

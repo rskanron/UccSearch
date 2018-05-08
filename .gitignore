@@ -1,3 +1,4 @@
 UccSearch/bin
 UccSearch/obj
-.vs/
+.vs/*
+/.vs

@@ -1,7 +1,9 @@
 <template>
   <div>
     
-    <h1>Colorado UCC Search</h1>
+    <h1>Uniform Commercial Code</h1>
+
+    <h2>Search For Debtors</h2>
 
     <input ref="searchTerm" v-on:keyup.enter="search" type="text">
 
@@ -32,7 +34,7 @@ import axios from 'axios'
     methods : {
       search (event) {
         var searchTerm = this.$refs.searchTerm.value
-        var url = `http://localhost:8081?searchTerm=${searchTerm}`
+        var url = `http://localhost:8081/debtors/?searchTerm=${searchTerm}`
 
         axios.get(url).then(
           (response) => { 
