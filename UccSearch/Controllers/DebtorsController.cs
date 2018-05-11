@@ -7,15 +7,15 @@ namespace UccSearch.Controllers
 {
     public class DebtorsController : Controller
     {
-
-        public IActionResult Index(UccService uccService)
+        [HttpGet]
+        public IActionResult Index([FromServices] IMarketplaceService masterListService)
         {                         
             var searchTerm = HttpContext.Request.Query["searchTerm"].ToString();
 
             if (string.IsNullOrEmpty(searchTerm)) {
                 return Json(new string[0]);
             } else {
-                var data = uccService.search(searchTerm);
+                var data = masterListService.search("debtorname", searchTerm);
                 return Json(data);
             }
         } 
